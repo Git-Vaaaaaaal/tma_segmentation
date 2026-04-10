@@ -67,7 +67,7 @@ testLoader = DataLoader(testDS, shuffle=False,
 
 
 # initialize our UNet model
-unet = UNet().to(config.DEVICE)
+unet = UNetResNet().to(config.DEVICE) #change between unet and unetresnet
 # initialize loss function and optimizer
 lossFunc = BCEWithLogitsLoss()
 opt = Adam(unet.parameters(), lr=config.INIT_LR)
