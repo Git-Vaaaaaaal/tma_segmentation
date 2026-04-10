@@ -21,7 +21,7 @@ def prepare_plot(origImage, origMask, predMask, number, save=False):
 	ax[2].set_title("Predicted Mask")
 	# set the layout of the figure and display it
 	figure.tight_layout()
-	figure.show()
+	#figure.show()
 	figure.savefig(f"output/prediction_{number}.png")
 	
 
