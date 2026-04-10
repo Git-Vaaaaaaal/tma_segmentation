@@ -82,7 +82,7 @@ def make_predictions(model, imagePath):
 # image paths
 print("[INFO] loading up test image paths...")
 imagePaths = open(config.TEST_PATHS).read().strip().split("\n")
-imagePaths = np.random.choice(imagePaths, size=10) # len(os.listdir(config.TEST_FINAL))
+imagePaths = np.random.choice(imagePaths, size=len(os.listdir(config.TEST_FINAL))) # len(os.listdir(config.TEST_FINAL))
 # load our model from disk and flash it to the current device
 print("[INFO] load up model...")
 unet = torch.load(config.MODEL_PATH, weights_only=False).to(config.DEVICE)
