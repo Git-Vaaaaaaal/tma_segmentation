@@ -5,7 +5,7 @@ from scipy.ndimage import distance_transform_edt
 from scipy.ndimage import binary_erosion as nd_binary_erosion
 
 def dice_coefficient(y_true, y_pred, epsilon=1e-7):
-    y_pred = (y_pred > 0.5).astype(np.float32)  # ✅ seuil
+    y_pred = (y_pred > 0.5).astype(np.float32)
     intersection = np.sum(y_true * y_pred)
     return (2. * intersection + epsilon) / (np.sum(y_true) + np.sum(y_pred) + epsilon)
 
