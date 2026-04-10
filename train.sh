@@ -11,4 +11,3 @@ export PYTHONPATH=/work/c-2iia/vb710264/tma_segmentation/venv/lib/python3.9/site
 export MPLCONFIGDIR=/work/c-2iia/vb710264/.cache/matplotlib
 
 python /beegfs/data/work/c-2iia/vb710264/tma_segmentation/train.py
-python /beegfs/data/work/c-2iia/vb710264/tma_segmentation/predict.py
