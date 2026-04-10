@@ -2,6 +2,7 @@
 import config
 from dataset import SegmentationDataset
 from model import UNet
+from model_resnet import UNetResNet
 from torch.nn import BCEWithLogitsLoss
 from torch.optim import Adam
 from torch.utils.data import DataLoader

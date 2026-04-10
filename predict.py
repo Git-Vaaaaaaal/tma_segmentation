@@ -80,7 +80,7 @@ imagePaths = open(config.TEST_PATHS).read().strip().split("\n")
 imagePaths = np.random.choice(imagePaths, size=len(os.listdir(config.TEST_FINAL)))
 # load our model from disk and flash it to the current device
 print("[INFO] load up model...")
-unet = torch.load(config.MODEL_PATH).to(config.DEVICE)
+unet = torch.load(config.MODEL_PATH, weights_only=False).to(config.DEVICE)
 # iterate over the randomly selected test image paths
 for path in imagePaths:
 	# make predictions and visualize the results
