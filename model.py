@@ -83,7 +83,8 @@ class UNet(Module):
 	def __init__(self, encChannels=(3, 16, 32, 64),
 		 decChannels=(64, 32, 16),
 		 nbClasses=1, retainDim=True,
-		 outSize=(config.INPUT_IMAGE_HEIGHT,  config.INPUT_IMAGE_WIDTH)):
+		 outSize=(config.INPUT_IMAGE_HEIGHT,  config.INPUT_IMAGE_WIDTH),
+		 pretrained_path=None):
 		super().__init__()
 		# initialize the encoder and decoder
 		self.encoder = Encoder(encChannels)
@@ -92,6 +93,8 @@ class UNet(Module):
 		self.head = Conv2d(decChannels[-1], nbClasses, 1)
 		self.retainDim = retainDim
 		self.outSize = outSize
+		if pretrained_path is not None:
+			self.load_pretrained(pretrained_path)
 		
 	def forward(self, x):
 		# grab the features from the encoder
@@ -109,3 +112,18 @@ class UNet(Module):
 			map = F.interpolate(map, self.outSize)
 		# return the segmentation map
 		return map
+	
+	def load_pretrained(self, path):
+		state_dict = torch.load(path, map_location=config.DEVICE)
+
+		# charge seulement les poids compatibles
+		model_dict = self.state_dict()
+		pretrained_dict = {
+			k: v for k, v in state_dict.items()
+			if k in model_dict and v.shape == model_dict[k].shape
+		}
+
+		model_dict.update(pretrained_dict)
+		self.load_state_dict(model_dict)
+
+		print(f"[INFO] {len(pretrained_dict)} layers loaded from pretrained weights")
