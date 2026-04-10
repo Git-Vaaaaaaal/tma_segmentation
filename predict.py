@@ -1,4 +1,6 @@
 # import the necessary packages
+from xml.parsers.expat import model
+
 import config
 import matplotlib.pyplot as plt
 import numpy as np
@@ -46,8 +48,9 @@ def make_predictions(model, imagePath):
 		# load the ground-truth segmentation mask in grayscale mode
 		# and resize it
 		gtMask = cv2.imread(groundTruthPath, 0)
-		gtMask = cv2.resize(gtMask, (config.INPUT_IMAGE_HEIGHT,
-			config.INPUT_IMAGE_HEIGHT))
+		gtMask = cv2.resize(gtMask, (config.INPUT_IMAGE_WIDTH,
+									config.INPUT_IMAGE_HEIGHT))
+		gtMask = (gtMask > 0).astype(np.uint8)
         
         # make the channel axis to be the leading one, add a batch
 		# dimension, create a PyTorch tensor, and flash it to the
@@ -60,9 +63,9 @@ def make_predictions(model, imagePath):
 		predMask = model(image).squeeze()
 		predMask = torch.sigmoid(predMask)
 		predMask = predMask.cpu().numpy()
-		# filter out the weak predictions and convert them to integers
-		predMask = (predMask > config.THRESHOLD) * 255
-		predMask = predMask.astype(np.uint8)
+
+		# ✅ binarisation propre
+		predMask = (predMask > config.THRESHOLD).astype(np.uint8)
 		# prepare a plot for visualization
 		prepare_plot(orig, gtMask, predMask, number=filename.split(".")[0], save=True)
 
@@ -77,7 +80,7 @@ def make_predictions(model, imagePath):
 # image paths
 print("[INFO] loading up test image paths...")
 imagePaths = open(config.TEST_PATHS).read().strip().split("\n")
-imagePaths = np.random.choice(imagePaths, size=len(os.listdir(config.TEST_FINAL)))
+imagePaths = np.random.choice(imagePaths, size=10) # len(os.listdir(config.TEST_FINAL))
 # load our model from disk and flash it to the current device
 print("[INFO] load up model...")
 unet = torch.load(config.MODEL_PATH, weights_only=False).to(config.DEVICE)
