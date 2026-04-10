@@ -74,6 +74,8 @@ def make_predictions(model, imagePath):
 		sdice = mt.surface_dice(gtMask, predMask, tolerance_mm=5.0)
 		assd = mt.average_symmetric_surface_distance(gtMask, predMask)
 		print(f"Metrics for {filename} - Dice: {dice:.4f}, Surface Dice@5mm: {sdice:.4f}, ASSD: {assd:.4f}")
+
+	return dice, sdice, assd
 		
 
 # load the image paths in our testing file and randomly select 10
@@ -85,6 +87,15 @@ imagePaths = np.random.choice(imagePaths, size=10) # len(os.listdir(config.TEST_
 print("[INFO] load up model...")
 unet = torch.load(config.MODEL_PATH, weights_only=False).to(config.DEVICE)
 # iterate over the randomly selected test image paths
+dice_list = []
+sdice_list = []
+assd_list = []
 for path in imagePaths:
 	# make predictions and visualize the results
-	make_predictions(unet, path)
+	dice, sdice, assd = make_predictions(unet, path)
+	dice_list.append(dice)
+	sdice_list.append(sdice)
+	assd_list.append(assd)
+
+# print the average metrics across all test images
+print(f"Average Dice: {np.mean(dice_list):.4f}, Average Surface Dice@5mm: {np.mean(sdice_list):.4f}, Average ASSD: {np.mean(assd_list):.4f}")
