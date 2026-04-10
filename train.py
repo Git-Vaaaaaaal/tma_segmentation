@@ -13,7 +13,6 @@ import matplotlib.pyplot as plt
 import torch
 import time
 import os
-from predict import make_predictions, prepare_plot
 import numpy as np 
 
 
