@@ -5,9 +5,13 @@ from scipy.ndimage import distance_transform_edt
 from scipy.ndimage import binary_erosion as nd_binary_erosion
 
 def dice_coefficient(y_true, y_pred, epsilon=1e-7):
-    y_pred = (y_pred > 0.5).astype(np.float32)
+    y_true = (y_true > 0).astype(np.float32)
+    y_pred = (y_pred > 0).astype(np.float32)
+
     intersection = np.sum(y_true * y_pred)
-    return (2. * intersection + epsilon) / (np.sum(y_true) + np.sum(y_pred) + epsilon)
+    union = np.sum(y_true) + np.sum(y_pred)
+
+    return (2. * intersection + epsilon) / (union + epsilon)
 
 def surface_dice(y_true, y_pred, tolerance_mm=5.0, voxel_spacing=(1.0, 1.0)):
     true_surface = np.logical_xor(y_true, nd_binary_erosion(y_true))
