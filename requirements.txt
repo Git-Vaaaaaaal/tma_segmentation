@@ -6,3 +6,4 @@ imutils
 scikit-learn
 tqdm
 pandas
+albumentations

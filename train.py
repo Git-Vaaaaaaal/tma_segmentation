@@ -8,6 +8,8 @@ from torch.optim import Adam
 from torch.utils.data import DataLoader
 from sklearn.model_selection import train_test_split
 from torchvision import transforms
+import albumentations as A
+from albumentations.pytorch import ToTensorV2
 from imutils import paths
 from tqdm import tqdm
 import matplotlib.pyplot as plt
@@ -40,17 +42,34 @@ f = open(config.TEST_PATHS, "w")
 f.write("\n".join(testImages))
 f.close()
 
-# modify size of image to fit the model, change height and widthinto config file
-transforms = transforms.Compose([transforms.ToPILImage(),
- 	transforms.Resize((config.INPUT_IMAGE_HEIGHT,
-		config.INPUT_IMAGE_WIDTH)),
-	transforms.ToTensor()])
+trainTransform = A.Compose([
+    A.Resize(config.INPUT_IMAGE_HEIGHT, config.INPUT_IMAGE_WIDTH),
+    # Géométrie
+    A.HorizontalFlip(p=0.5),
+    A.VerticalFlip(p=0.3),
+    A.ShiftScaleRotate(shift_limit=0.05, scale_limit=0.1,
+                       rotate_limit=15, p=0.5),
+    # Apparence
+    A.RandomBrightnessContrast(brightness_limit=0.2,
+                               contrast_limit=0.2, p=0.4),
+    A.GaussianBlur(blur_limit=(3, 5), p=0.2),
+    A.GaussNoise(p=0.2),
+    # Normalisation + conversion tensor
+    A.Normalize(mean=(0.0,), std=(1.0,)),
+    ToTensorV2(),
+])
+
+testTransform = A.Compose([
+    A.Resize(config.INPUT_IMAGE_HEIGHT, config.INPUT_IMAGE_WIDTH),
+    A.Normalize(mean=(0.0,), std=(1.0,)),
+    ToTensorV2(),
+])
 
 # create the train and test datasets
 trainDS = SegmentationDataset(imagePaths=trainImages, maskPaths=trainMasks,
-	transforms=transforms)
+    transforms=trainTransform)
 testDS = SegmentationDataset(imagePaths=testImages, maskPaths=testMasks,
-    transforms=transforms)
+    transforms=testTransform)
 
 print("ok step 2")
 
