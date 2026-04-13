@@ -42,34 +42,16 @@ f = open(config.TEST_PATHS, "w")
 f.write("\n".join(testImages))
 f.close()
 
-trainTransform = A.Compose([
-    A.Resize(config.INPUT_IMAGE_HEIGHT, config.INPUT_IMAGE_WIDTH),
-    # Géométrie
-    A.HorizontalFlip(p=0.5),
-    A.VerticalFlip(p=0.3),
-    A.ShiftScaleRotate(shift_limit=0.05, scale_limit=0.1,
-                       rotate_limit=15, p=0.5),
-    # Apparence
-    A.RandomBrightnessContrast(brightness_limit=0.2,
-                               contrast_limit=0.2, p=0.4),
-    A.GaussianBlur(blur_limit=(3, 5), p=0.2),
-    A.GaussNoise(p=0.2),
-    # Normalisation + conversion tensor
-    A.Normalize(mean=(0.0,), std=(1.0,)),
-    ToTensorV2(),
-])
-
-testTransform = A.Compose([
-    A.Resize(config.INPUT_IMAGE_HEIGHT, config.INPUT_IMAGE_WIDTH),
-    A.Normalize(mean=(0.0,), std=(1.0,)),
-    ToTensorV2(),
-])
+transforms = transforms.Compose([transforms.ToPILImage(),
+ 	transforms.Resize((config.INPUT_IMAGE_HEIGHT,
+		config.INPUT_IMAGE_WIDTH)),
+	transforms.ToTensor()])
 
 # create the train and test datasets
 trainDS = SegmentationDataset(imagePaths=trainImages, maskPaths=trainMasks,
-    transforms=trainTransform)
+    transforms=transforms)
 testDS = SegmentationDataset(imagePaths=testImages, maskPaths=testMasks,
-    transforms=testTransform)
+    transforms=transforms)
 
 print("ok step 2")
 
@@ -109,7 +91,6 @@ for e in tqdm(range(config.NUM_EPOCHS)):
 	totalTestLoss = 0
 	# loop over the training set
 	for (i, (x, y)) in enumerate(trainLoader):
-		y = y.unsqueeze(1) #For the BCEWithLogitsLoss, the target should have the same shape as the output, which is (batch_size, 1, height, width) in our case. By unsqueezing the target tensor, we add an extra dimension to match the expected shape. This allows us to compute the loss correctly during training.
 		# send the input to the device
 		(x, y) = (x.to(config.DEVICE), y.to(config.DEVICE))
 		# perform a forward pass and calculate the training loss
