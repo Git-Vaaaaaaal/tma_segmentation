@@ -3,4 +3,5 @@
 /unet_tma_venv
 dataset_unet.zip
 /output
-/TMAs_segmenter
+/TMAs
+/pypi_segmenter

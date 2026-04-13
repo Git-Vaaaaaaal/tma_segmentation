@@ -140,6 +140,7 @@ plt.xlabel("Epoch #")
 plt.ylabel("Loss")
 plt.legend(loc="lower left")
 plt.savefig(config.PLOT_PATH)
+
 # serialize the model to disk
 torch.save(unet.state_dict(), config.MODEL_PATH)
 
