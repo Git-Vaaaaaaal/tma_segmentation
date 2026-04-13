@@ -15,6 +15,21 @@ class SegmentationDataset(Dataset):
 		# return the number of total samples contained in the dataset
 		return len(self.imagePaths)
 	def __getitem__(self, idx):
+		imagePath = self.imagePaths[idx]
+
+		image = cv2.imread(imagePath)
+		image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+		mask = cv2.imread(self.maskPaths[idx], 0)
+
+		if self.transforms is not None:
+			augmented = self.transforms(image=image, mask=mask)
+			image = augmented["image"]
+			mask = augmented["mask"]
+
+		return (image, mask)
+
+""" 	def __getitem__(self, idx):  #Ancien getitem sans transformation
 		# grab the image path from the current index
 		imagePath = self.imagePaths[idx]
 		# load the image from disk, swap its channels from BGR to RGB,
@@ -29,5 +44,5 @@ class SegmentationDataset(Dataset):
 			mask = self.transforms(mask)
 		# return a tuple of the image and its mask
 		return (image, mask)
-
+ """
 
