@@ -109,6 +109,7 @@ for e in tqdm(range(config.NUM_EPOCHS)):
 	totalTestLoss = 0
 	# loop over the training set
 	for (i, (x, y)) in enumerate(trainLoader):
+		y = y.unsqueeze(1) #For the BCEWithLogitsLoss, the target should have the same shape as the output, which is (batch_size, 1, height, width) in our case. By unsqueezing the target tensor, we add an extra dimension to match the expected shape. This allows us to compute the loss correctly during training.
 		# send the input to the device
 		(x, y) = (x.to(config.DEVICE), y.to(config.DEVICE))
 		# perform a forward pass and calculate the training loss
