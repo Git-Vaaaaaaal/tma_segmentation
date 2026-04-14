@@ -1,0 +1,5 @@
+torch
+numpy
+huggingface_hub
+opencv-python
+pillow

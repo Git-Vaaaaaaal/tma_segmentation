@@ -1,9 +1,7 @@
-<img width="2242" height="1267" alt="image" src="https://github.com/user-attachments/assets/3e0d6e0b-aafa-400b-a129-63b837c2ee01" />
+# TMAx 
+This project proposes an image segmentation model for histopathological images, specifically designed for Tissue MicroArrays (TMA) used in pathological anatomy.
 
-# TMAs 
-Ce projet propose un modèle de segmentation d’images histopathologiques, spécialisé dans les Tissue MicroArrays (TMA) utilisés en anatomopathologie.
-
-L’objectif est de segmenter automatiquement des structures d’intérêt dans des lames numériques, en particulier dans le contexte des lymphomes.
+The goal is to automatically segment structures of interest in digital slides, particularly in the context of lymphomas.
 
 # Documentation
 def predict_mask(model, imagePath, outputPath, repo_id="Vaaaal/TMAs", filename="tmas_segmenter.pth"):

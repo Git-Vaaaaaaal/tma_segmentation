@@ -1,0 +1,9 @@
+README.md
+pyproject.toml
+TMAx/__init__.py
+TMAx/core.py
+TMAx.egg-info/PKG-INFO
+TMAx.egg-info/SOURCES.txt
+TMAx.egg-info/dependency_links.txt
+TMAx.egg-info/requires.txt
+TMAx.egg-info/top_level.txt

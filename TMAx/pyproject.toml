@@ -1,12 +1,13 @@
 [project]
-name = "TMAs"
-version = "0.1.0"
+name = "TMAx"
+version = "0.1.2"
 description = "Module for segmenting pathological images of tissue microarrays"
 dependencies = [
     "torch",
     "numpy",
     "huggingface_hub",
     "opencv-python",
+    "pillow"
 ]
 authors = [
     { name="BOSCH Valentin", email="val.bosch2001@gmail.com" }
